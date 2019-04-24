@@ -39,7 +39,7 @@ import { debounce } from 'quasar'
 const subscriptionKey = "0cb2eb1b14bc4c48a8212a1292167425"
 const serviceRegion = "eastus"
 
-const baseURL = 'http://localhost:5005/conversations/current/respond'
+const baseURL = 'https://voiceorder.qubeyond.com/conversations/current/respond'
 
 export default {
   name: 'PageIndex',
