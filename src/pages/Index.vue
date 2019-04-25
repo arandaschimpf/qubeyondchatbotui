@@ -2,6 +2,8 @@
   <q-page class="flex flex-center">
     <q-card class="col-8">
       <q-card-title>
+        <q-btn color="primary" class="full-width reset" @click="reset">Reset conversation</q-btn>
+        <br>
         <q-btn color="primary" class="full-width" :disabled="recording" @click="startRecording">Start recording</q-btn>
       </q-card-title>
       <q-card-main>
@@ -17,7 +19,7 @@
       <q-card-separator />
       <q-card-actions class="row justify-between">
         <q-input v-model="text" class="col-10" ref="input" @keyup.enter="addMessage(text)"/>
-        <q-btn color="primary" class="col-2" icon="send" :disabled="text.length < 3" @click="addMessage(text)"/>
+        <q-btn color="primary" class="col-2" icon="send" :disabled="text.length < 1" @click="addMessage(text)"/>
       </q-card-actions>
     </q-card>
   </q-page>
@@ -32,6 +34,10 @@
   height: 50vh;
   overflow: auto;
 }
+
+.reset {
+  margin-bottom: 10px;
+}
 </style>
 
 <script>
@@ -39,27 +45,31 @@ import { debounce } from 'quasar'
 const subscriptionKey = "0cb2eb1b14bc4c48a8212a1292167425"
 const serviceRegion = "eastus"
 
-const baseURL = 'https://voiceorder.qubeyond.com/conversations/current/respond'
-
 export default {
   name: 'PageIndex',
   data: () => ({
     text: '',
     recording: false,
-    messages: []
+    messages: [],
+    id: null
   }),
   mounted () {
     if (!window.SpeechSDK) {
       this.recording = true
     }
-    this.addMessage('Hello')
+    this.reset()
   },
   methods: {
+    reset () {
+      this.id = String(Math.floor(Math.random() * 10000)).padStart(4, '0')
+      this.messages = []
+      this.addMessage('Hello')
+    },
     goToBottom: debounce(function() {
       this.$refs.scroll.setScrollPosition(Number.MAX_SAFE_INTEGER, 100)
     }, 50),
     addMessage (text, sent = true) {
-      if (text.length < 3) return
+      if (text.length < 1) return
       this.text = ''
       this.messages.push({text: [text], sent})
       this.goToBottom()
@@ -68,8 +78,7 @@ export default {
       }
     },
     sendMessage (query) {
-      if (!baseURL) return
-      fetch(baseURL, {
+      fetch(`https://voiceorder.qubeyond.com/conversations/${this.id}/respond`, {
         method: 'post',
         body: JSON.stringify({ query })
       }).then(r => r.json()).then(messages => {
