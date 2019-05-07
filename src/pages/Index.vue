@@ -63,7 +63,7 @@ export default {
     reset () {
       this.id = String(Math.floor(Math.random() * 10000)).padStart(4, '0')
       this.messages = []
-      this.addMessage('Hello')
+      this.addMessage(`I'm QuBot, talk to me!`, false)
     },
     goToBottom: debounce(function() {
       this.$refs.scroll.setScrollPosition(Number.MAX_SAFE_INTEGER, 100)
