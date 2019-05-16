@@ -4,7 +4,9 @@
       <q-card-title>
         <q-btn color="primary" class="full-width reset" @click="reset">Reset conversation</q-btn>
         <br>
-        <q-btn color="primary" class="full-width" :disabled="recording" @click="startRecording">Start recording</q-btn>
+        <q-btn color="primary" class="full-width reset" :disabled="recording" @click="startRecording">Start recording</q-btn>
+        <br>
+        <exporter-button :messages="messages" />
       </q-card-title>
       <q-card-main>
         <q-scroll-area style="width: 100%; height: 100%;" ref="scroll">
@@ -42,11 +44,13 @@
 
 <script>
 import { debounce } from 'quasar'
+import ExporterButton from 'components/Exporter'
 const subscriptionKey = "0cb2eb1b14bc4c48a8212a1292167425"
 const serviceRegion = "eastus"
 
 export default {
   name: 'PageIndex',
+  components: { ExporterButton },
   data: () => ({
     text: '',
     recording: false,
