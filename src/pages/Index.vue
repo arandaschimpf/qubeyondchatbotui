@@ -82,7 +82,7 @@ export default {
       }
     },
     sendMessage (message) {
-      fetch(`http://localhost:5005/webhooks/rest/webhook`, {
+      fetch(`https://voiceorder.qubeyond.com/webhooks/rest/webhook`, {
         method: 'post',
         body: JSON.stringify({
           message,
