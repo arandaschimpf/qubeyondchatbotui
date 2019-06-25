@@ -81,10 +81,13 @@ export default {
         this.sendMessage(text)
       }
     },
-    sendMessage (query) {
-      fetch(`https://voiceorder.qubeyond.com/conversations/${this.id}/respond`, {
+    sendMessage (message) {
+      fetch(`http://localhost:5005/webhooks/rest/webhook`, {
         method: 'post',
-        body: JSON.stringify({ query })
+        body: JSON.stringify({
+          message,
+          sender: this.id
+        })
       }).then(r => r.json()).then(messages => {
         for (const { text } of messages) {
           this.addMessage(text, false)
